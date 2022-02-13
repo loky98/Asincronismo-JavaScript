@@ -37,6 +37,8 @@ console.log(fecha);
 
 let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
+const API ='https://rickandmortyapi.com/api/';
+
 function fetchData(url_api, callback){
     let xhttp = new XMLHttpRequest();
     xhttp.open('GET',url_api,true)
@@ -53,3 +55,19 @@ function fetchData(url_api, callback){
     }
     xhttp.send();
 }
+// Callback Hell
+fetchData(API,(error1, data1)=>{
+    if(error1)return console.error(error1);
+    fetchData(data1.characters,(error2, data2)=>{
+        if(error2) return console.error(error2);
+         fetchData(data1.characters+'/'+data2.results[0].id, (error3, data3)=>{
+             if(error3) return console.error(error3)
+             fetchData(data3.origin.url, (error4, data4)=>{
+                 if(error4) return console.error(error4);
+                console.log(data3.id);
+                console.log(data3.name);
+                console.log(data4.dimension);
+             })
+         })
+    })
+})
